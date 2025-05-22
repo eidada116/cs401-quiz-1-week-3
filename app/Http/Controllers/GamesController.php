@@ -19,19 +19,27 @@ class GamesController extends Controller
     public function index()
     {
         //Step 3. Your code here
+        return view('games.index', ['games' => $this->game_list]);
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //Step 4.
-        $results = array_filter($this->game_list, function ($game) use ($id) {
-            return $game['id'] != $id;
-        });
-        return view('games.show', ['games' => $results]);
+{
+    $results = array_filter($this->game_list, function ($game) use ($id) {
+        return $game['id'] == $id;  // Keep only the game with matching ID
+    });
+
+    // Get the first (and only) result or null if not found
+    $game = array_values($results)[0] ?? null;
+
+    if (!$game) {
+        abort(404, 'Game not found');
     }
+
+    return view('games.show', ['game' => $game]);
+}
 
     /**
      * Remove the specified resource from storage.
@@ -46,4 +54,6 @@ class GamesController extends Controller
             'content' => $results
         ], 200);
     }
+
+   
 }
