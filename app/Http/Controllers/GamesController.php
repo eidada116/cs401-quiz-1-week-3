@@ -29,10 +29,6 @@ class GamesController extends Controller
     {
         $game = collect($this->game_list)->firstWhere('id', $id);
 
-        if (!$game) {
-            abort(404, 'Game not found');
-        }
-
         // Return the *show* view with a single game
         return view('games.show', ['game' => $game]);
     }
